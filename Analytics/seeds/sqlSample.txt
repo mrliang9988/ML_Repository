@@ -1,0 +1,90 @@
+select e.Name,e.salary,e1.avgsalary from tblEmployee e inner join
+(
+select deptid, 
+avg(salary)as avgsalary from
+tblEmployee e group by  deptid ) e1
+on
+e1.Deptid=e.Deptid and e.salary> e1.avgsalary
+
+
+
+
+select e.[name],e.salary from tblEmployee e inner join (
+select departmentid, max(salary) maxsalary
+from tblEmployee group by Departmentid having Departmentid is not null) e1
+on e1.Departmentid=e.Departmentid
+and e1.maxsalary=e.Salary
+
+
+select Employeeid, e.deptid,salary
+from Employees e
+inner join (
+select deptid, max(salary) maxsalary
+from Employees group by deptid
+) e1
+on
+e.Deptid=e1.Deptid and
+e.salary=e1.maxsalary
+
+
+-- inner join
+select [name],gender,salary,departmentname  from tblEmployee e inner join tbldepartment d on  e.DEPARTMENTID=d.ID
+
+-- left join  
+select [name],gender,salary,departmentname  from tblEmployee e left join tbldepartment d on  e.DEPARTMENTID=d.ID
+
+-- left join  filter departmentid =null
+select [name],gender,salary,departmentname  from tblEmployee e left join tbldepartment d on  e.DEPARTMENTID=d.ID where d.id is null
+
+-- right join  
+select [name],gender,salary,departmentname from tblEmployee e right join tbldepartment d on  e.DEPARTMENTID=d.ID where e.DEPARTMENTID is null
+
+--Full join looking for both table departmentid is null  
+select [name],gender,salary,departmentname from tblEmployee e full join tbldepartment d on  e.DEPARTMENTID=d.ID where e.DEPARTMENTID is null or d.id is null
+
+--self join - it is join itself
+--INNER   self join
+
+ select * from tblEmployeeManager
+
+select  e.employeeid, e.name as employeename, m.name as managername 
+from tblEmployeeManager e
+inner join tblEmployeeManager m
+on e.managerid=m.employeeid
+order by e.employeeid asc
+
+--left  OUTER self join
+select  e.employeeid, e.name as employeename, case when m.name is not null then m.name else 'NO MANAGER' end managername 
+from tblEmployeeManager e
+left join tblEmployeeManager m
+on e.managerid=m.employeeid
+order by e.employeeid asc
+--OR
+select  e.employeeid, e.name as employeename, ISNULL(M.NAME,'NO MANAGER')  managername 
+from tblEmployeeManager e
+left join tblEmployeeManager m
+on e.managerid=m.employeeid
+order by e.employeeid asc
+
+--OR
+select  e.employeeid, e.name as employeename, COALESCE(M.NAME,'NO MANAGER')  managername 
+from tblEmployeeManager e
+left join tblEmployeeManager m
+on e.managerid=m.employeeid
+order by e.employeeid asc
+
+
+--CROSS   self join
+select  e.employeeid, e.name as employeename, ISNULL(M.NAME,'NO MANAGE')  managername 
+from tblEmployeeManager e
+CROSS join tblEmployeeManager m
+ 
+--UNION 
+SELECT ID,NAME,EMAIL FROM  tblIndiaCustomers
+union
+SELECT ID,NAME,EMAIL FROM  tblUKCustomers
+
+--union all
+SELECT ID,NAME,EMAIL FROM  tblIndiaCustomers
+union all
+SELECT ID,NAME,EMAIL FROM  tblUKCustomers
